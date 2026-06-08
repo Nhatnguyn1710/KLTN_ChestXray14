@@ -1,0 +1,34 @@
+# ============================================================
+# Requirements - Hệ thống Chẩn đoán X-quang Ngực
+# ============================================================
+
+# --- Core Deep Learning ---
+torch>=2.0
+torchvision>=0.15
+torchaudio>=2.0
+
+# --- CNN & Grad-CAM ---
+pytorch-grad-cam>=1.4.8
+torchxrayvision>=1.0.0
+albumentations>=1.3.1
+Pillow>=10.0
+opencv-python>=4.8
+
+# --- Web Application ---
+fastapi>=0.104
+uvicorn[standard]>=0.24
+gradio>=4.0
+python-multipart>=0.0.6
+
+# --- Data & Utilities ---
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+matplotlib>=3.7
+seaborn>=0.12
+tqdm>=4.65
+pyyaml>=6.0
+
+# --- Logging & Monitoring ---
+tensorboard>=2.14
+wandb>=0.16

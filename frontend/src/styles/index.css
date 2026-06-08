@@ -1,0 +1,247 @@
+@import './tailwind.css';
+
+/* ── Medical X-Ray Scan Animations ── */
+@keyframes xrayScanBeam {
+  0%   { top: -4px; opacity: 0; }
+  4%   { opacity: 1; }
+  96%  { opacity: 1; }
+  100% { top: calc(100% + 4px); opacity: 0; }
+}
+@keyframes medFadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes medSlideInRow {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes medPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.95); }
+  50%       { opacity: 1;   transform: scale(1.05); }
+}
+@keyframes medSpinRing {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes medProgressBar {
+  from { width: 0%; }
+}
+@keyframes medGlowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(6,182,212,0.4); }
+  50%       { box-shadow: 0 0 20px rgba(6,182,212,0.9), 0 0 40px rgba(6,182,212,0.4); }
+}
+@keyframes medBadgeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── App reset ── */
+html, body, #root { height: 100%; margin: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #EEF3FA;
+  color: #0F172A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Range slider ── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1D72F5;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(29,114,245,0.2), 0 2px 6px rgba(0,0,0,0.15);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1D72F5;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ── Range slider thumb hover ── */
+input[type="range"]::-webkit-slider-thumb {
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 0 6px rgba(29,114,245,0.22), 0 2px 6px rgba(0,0,0,0.15);
+  transform: scale(1.18);
+}
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 8px rgba(29,114,245,0.15), 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ── Custom thin scrollbar ── */
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }
+
+/* ── Interactive effects ── */
+
+/* Upload zone: hover scale + glow when empty */
+@keyframes uploadIconBounce {
+  0%, 100% { transform: translateY(0); }
+  35%       { transform: translateY(-7px); }
+  65%       { transform: translateY(-2px); }
+}
+@keyframes uploadZoomIn {
+  from { transform: scale(0.94); opacity: 0.7; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.upload-zone {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+}
+.upload-zone-empty:hover {
+  border-color: #93C5FD !important;
+  background: #EFF6FF !important;
+  box-shadow: 0 0 0 4px rgba(29,114,245,0.08) !important;
+}
+.upload-zone-empty:hover .upload-icon-box {
+  animation: uploadIconBounce 0.55s ease;
+  border-color: #3B82F6 !important;
+  background: #DBEAFE !important;
+}
+.upload-zone-loaded {
+  animation: uploadZoomIn 0.3s ease;
+}
+
+/* Ripple on click (use ::after pseudo-element approach) */
+@keyframes rippleOut {
+  from { transform: scale(0);   opacity: 0.5; }
+  to   { transform: scale(4.5); opacity: 0; }
+}
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+.ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.35) 0%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: transform 0s, opacity 0s;
+}
+.ripple:active::after {
+  transform: scale(2.5);
+  opacity: 1;
+  transition: transform 0.35s ease, opacity 0.3s ease;
+}
+
+/* Primary CTA button (analyze) */
+.btn-primary {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease !important;
+}
+.btn-primary:not(:disabled):hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.1);
+  box-shadow: 0 8px 28px rgba(29,114,245,0.55), 0 1px 0 rgba(255,255,255,0.15) inset !important;
+}
+.btn-primary:not(:disabled):active {
+  transform: translateY(0) scale(0.97) !important;
+  filter: brightness(0.96);
+  transition-duration: 0.07s !important;
+}
+
+/* Icon buttons (close / clear) */
+.btn-icon {
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease !important;
+}
+.btn-icon:hover {
+  transform: scale(1.18) !important;
+  background: rgba(239,68,68,0.85) !important;
+}
+.btn-icon:active {
+  transform: scale(0.9) !important;
+  transition-duration: 0.07s !important;
+}
+
+/* Tab buttons */
+.tab-btn {
+  transition: color 0.15s ease, background 0.15s ease !important;
+  border-radius: 8px 8px 0 0;
+}
+.tab-btn:hover {
+  background: rgba(29,114,245,0.07) !important;
+}
+
+/* Disease table row hover */
+.disease-row {
+  transition: background 0.12s ease !important;
+  cursor: default;
+}
+.disease-row:hover {
+  background: rgba(29,114,245,0.045) !important;
+}
+
+/* Select field focus */
+.select-field {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+.select-field:focus {
+  border-color: #1D72F5 !important;
+  box-shadow: 0 0 0 3px rgba(29,114,245,0.14) !important;
+  outline: none !important;
+}
+
+/* Toggle switch bounce */
+.toggle-track {
+  transition: background 0.22s ease, box-shadow 0.22s ease !important;
+}
+.toggle-thumb {
+  transition: left 0.22s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+.toggle-track:active .toggle-thumb {
+  width: 22px !important;
+}
+
+/* Grad-CAM tab prev/next buttons */
+.btn-nav {
+  transition: background 0.15s ease, transform 0.15s ease !important;
+}
+.btn-nav:hover {
+  background: rgba(29,114,245,0.12) !important;
+  transform: scale(1.08) !important;
+}
+.btn-nav:active {
+  transform: scale(0.95) !important;
+}
+
+/* History scan cards */
+.history-card {
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease !important;
+}
+.history-card:hover {
+  box-shadow: 0 4px 18px rgba(0,0,0,0.09) !important;
+  transform: translateY(-1px) !important;
+  border-color: #93C5FD !important;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
