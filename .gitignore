@@ -1,0 +1,85 @@
+# .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dataset (quá lớn, không push lên git)
+archive/
+data/qdrant_data/
+
+# Model weights (quá lớn)
+models/densenet121/*.pth
+models/qwen2.5-3b-qlora/*
+!models/densenet121/.gitkeep
+!models/qwen2.5-3b-qlora/.gitkeep
+
+# Outputs
+outputs/
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Frontend generated
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Runtime uploads / generated Grad-CAM images
+src/api/uploads/
+src/api/static/gradcam/
+src/api/static/dist/
+src/web/static/gradcam/
+
+# Model checkpoints / exported weights
+models/*
+!models/.gitkeep
+models/**/*.pth
+models/**/*.pt
+models/**/*.onnx
+
+# Training / evaluation outputs
+outputs_nih/
+outputs_nih_bce/
+outputs_nih_asl/
+outputs_nih_tham_chieu/
+
+# Temporary audit/cache folders
+.tmp_pdf_audit/
+.tmp_thesis_audit/
+thong_so/so_do/cache/
+
+# Calibration backups
+configs/calibration.backup*.json
+configs/*.backup*.json
+
+# Large generated metadata
+data/image_metadata_index.json
+
+# Thesis/private drafts
+*_kltn*.docx.md
+paper.txt
+
+# Generated thesis/report assets
+slides/
+thong_so/
