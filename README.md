@@ -6,9 +6,13 @@ Grad-CAM visualization, a FastAPI backend, and a React frontend.
 
 ## System Workflow
 
-![Chest X-ray diagnosis system workflow](docs/workflow.png)
+<p align="center">
+  <a href="docs/system-workflow.png">
+    <img src="docs/system-workflow.png" alt="Chest X-ray diagnosis system workflow" width="100%">
+  </a>
+</p>
 
-Editable diagram source: [`docs/workflow.drawio`](docs/workflow.drawio)
+Editable diagram source: [`docs/workflow.drawio`](docs/workflow.drawio) (open in [diagrams.net](https://app.diagrams.net/) for editing; GitHub preview of `.drawio` may render incorrectly).
 
 ## Main Features
 
