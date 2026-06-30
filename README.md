@@ -4,6 +4,12 @@ Deep learning system for multi-label chest X-ray diagnosis on NIH ChestX-ray14.
 The project includes DenseNet-121 training/evaluation, probability calibration,
 Grad-CAM visualization, a FastAPI backend, and a React frontend.
 
+## System Workflow
+
+![Chest X-ray diagnosis system workflow](docs/workflow.png)
+
+Editable diagram source: [`docs/workflow.drawio`](docs/workflow.drawio)
+
 ## Main Features
 
 - Multi-label classification for 14 NIH ChestX-ray14 findings.

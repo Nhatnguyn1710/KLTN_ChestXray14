@@ -1,0 +1,139 @@
+<mxfile host="app.diagrams.net" agent="cursor" version="24.0.0">
+  <diagram id="workflow-xray-llm" name="X-Ray Diagnosis Workflow">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Chest X-ray Multi-Label Diagnosis &#8212; System Workflow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=32;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="200" y="20" width="1200" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Three phases: Model Training &#8594; Post-training Calibration on Validation &#8594; Inference &amp; Web Deployment&#10;&lt;font style=&quot;font-size:15px;color:#9CA3AF&quot;&gt;Clinical decision support &#8212; not a substitute for physicians&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=2;fontColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="200" y="56" width="1200" height="46" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p1-badge" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#7C3AED;strokeColor=#5B21B6;fontColor=#FFFFFF;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="140" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-title" value="Model Training" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=20;fontStyle=1;fontColor=#111827;" vertex="1" parent="1">
+          <mxGeometry x="76" y="140" width="240" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p1-data" value="NIH ChestX-ray14&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;train / val / test split&#10;by Patient ID&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="180" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-prep" value="Preprocessing&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;CLAHE + letterbox 448&#10;corner-erase + AP/PA&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="280" y="200" width="180" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-aug" value="Augmentation&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;flip, crop, brightness&#10;blur, noise (train only)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="520" y="200" width="180" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-bb" value="DenseNet-121&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;LSE pooling&#10;+ AP/PA as feature&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=2;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="760" y="200" width="180" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-head" value="14-label Head&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;Linear &#8594; 14 logits&#10;(sigmoid at inference)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="200" width="180" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-loss" value="Loss Function&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;FZLPR&#10;optimized for 14 disease labels&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="200" width="180" height="112" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p1-data" target="p1-prep"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p1-prep" target="p1-aug"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p1-aug" target="p1-bb"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p1-bb" target="p1-head"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p1-head" target="p1-loss"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="bridge12" value="model logits on validation set" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=16;fontStyle=2;fontColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="640" y="340" width="320" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bridge12" style="endArrow=classic;html=1;strokeColor=#7C3AED;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p1-head" target="p2-calib"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="p2-badge" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#7C3AED;strokeColor=#5B21B6;fontColor=#FFFFFF;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="390" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-title" value="Post-training Calibration on Validation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=20;fontStyle=1;fontColor=#111827;" vertex="1" parent="1">
+          <mxGeometry x="76" y="390" width="400" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p2-calib" value="Probability Calibration&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;Temperature Scaling / Isotonic&#10;select by lowest NLL on Val&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=2;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="645" y="450" width="280" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-thr" value="Youden-J Threshold&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;detection threshold + equivocal band (&#916;=0.08)&#10;3 tiers: Positive / Uncertain / Negative&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=2;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="975" y="450" width="320" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p2-calib" target="p2-thr"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="p3-badge" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#7C3AED;strokeColor=#5B21B6;fontColor=#FFFFFF;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="640" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-title" value="Inference &amp; Web Deployment (FastAPI + React)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=20;fontStyle=1;fontColor=#111827;" vertex="1" parent="1">
+          <mxGeometry x="76" y="640" width="500" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bridge23a" value="T / Isotonic params" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=16;fontStyle=2;fontColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="760" y="580" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="bridge23b" value="per-label thresholds (fitted)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=16;fontStyle=2;fontColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="580" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bridge23a" style="endArrow=classic;html=1;strokeColor=#7C3AED;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p2-calib" target="p3-apply-calib"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_bridge23b" style="endArrow=classic;html=1;strokeColor=#7C3AED;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p2-thr" target="p3-apply-thr"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="p3-input" value="Input Image&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;chest X-ray&#10;PNG / JPG&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="700" width="190" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-prep" value="Image Normalization&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;contrast enhance + resize 448&#10;corner-erase + view (AP/PA)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="295" y="700" width="190" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-model" value="DenseNet-121&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;load trained weights&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=2;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="540" y="700" width="190" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-apply-calib" value="Apply Calibration&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;T-scaling / Isotonic&#10;(from phase 2)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="785" y="700" width="190" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-apply-thr" value="3-tier Classification&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;apply saved thresholds to probabilities&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="700" width="210" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-web" value="Web app&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;Backend: FastAPI&#10;Frontend: React&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1295" y="700" width="190" height="122" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e7" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p3-input" target="p3-prep"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p3-prep" target="p3-model"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p3-model" target="p3-apply-calib"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p3-apply-calib" target="p3-apply-thr"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="endArrow=classic;html=1;strokeColor=#374151;strokeWidth=1.5;" edge="1" parent="1" source="p3-apply-thr" target="p3-web"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="p3-gradcam" value="Heatmap (Grad-CAM)&#10;&#10;&lt;font style=&quot;font-size:16px;color:#6B7280&quot;&gt;up to 5 abnormal labels&#10;detected (confirmed)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="485" y="890" width="300" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="gc-label1" value="from trained model" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=2;fontColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="500" y="835" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gc-label2" value="displayed on web app" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=2;fontColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="835" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="e_gc1" style="endArrow=classic;html=1;strokeColor=#D97706;strokeWidth=1.5;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p3-model" target="p3-gradcam"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_gc2" style="endArrow=classic;html=1;strokeColor=#D97706;strokeWidth=1.5;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="p3-gradcam" target="p3-web"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="lg-title" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#111827;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="316" width="200" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="lg1" value="Key model component" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=2;fontSize=16;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="360" width="220" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="lg2" value="Explainability" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=16;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="420" width="220" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="lg3" value="Product delivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontSize=16;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="485" width="220" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="lg4" value="Standard step" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#374151;strokeWidth=1.5;fontSize=16;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="560" width="220" height="46" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
