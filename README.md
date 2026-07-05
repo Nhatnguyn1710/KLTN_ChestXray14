@@ -64,7 +64,7 @@ Pneumonia · Pneumothorax
 ## System Pipeline
 
 <p align="center">
-  <img src="docs/workflow.svg" alt="Chest X-ray multi-label diagnosis system workflow" width="960"/>
+  <img src="docs/workflow.png" alt="Chest X-ray multi-label diagnosis system workflow" width="960"/>
 </p>
 
 Editable source: [`docs/workflow.drawio`](docs/workflow.drawio)  
