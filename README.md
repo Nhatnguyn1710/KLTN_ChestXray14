@@ -4,7 +4,7 @@ End-to-end deep learning system for **multi-label chest X-ray screening** on the
 [NIH ChestX-ray14](https://nihcc.app.box.com/v/ChestXray-NIHCC) dataset
 (112,120 images, 14 pathology labels).
 
-Graduation thesis project by **Nguyen Ba Nhat** — covers model design, training,
+Graduation thesis project by **Nguyen Ba Nhat**. It covers model design, training,
 probability calibration, explainability (Grad-CAM), evaluation, and a deployable
 **FastAPI + React** web demo.
 
@@ -13,12 +13,13 @@ probability calibration, explainability (Grad-CAM), evaluation, and a deployable
 ## Overview
 
 Radiologists often need to check many findings on a single X-ray. This project
-automates that workflow: upload one image → receive calibrated probabilities
-for 14 common chest conditions → inspect Grad-CAM heatmaps for model focus areas.
+automates that workflow: upload one image, receive calibrated probabilities
+for 14 common chest conditions, and inspect Grad-CAM heatmaps for model focus
+areas.
 
 | Stage | What happens |
 |-------|----------------|
-| **Preprocessing** | Resize, normalize, optional CLAHE & augmentation |
+| **Preprocessing** | Resize, normalize, optional CLAHE and augmentation |
 | **Classification** | DenseNet-121 + LSE pooling → 14 sigmoid outputs |
 | **Calibration** | Per-label Temperature Scaling or Isotonic Regression |
 | **Decision** | Per-label thresholds tuned on validation data |
@@ -40,10 +41,10 @@ Pneumonia · Pneumothorax
 |------|--------|
 | **Spatial pooling** | LSE (Log-Sum-Exp) pooling as the proposed method vs. GAP baseline |
 | **Loss function** | FZLPR for class-imbalanced multi-label learning (BCE/ASL ablations included) |
-| **Calibration** | Post-hoc per-label calibration; picks TS or Isotonic by validation NLL |
+| **Calibration** | Post-hoc per-label calibration that picks TS or Isotonic by validation NLL |
 | **Explainability** | Grad-CAM heatmaps aligned with model decision regions |
 | **Evaluation** | Rigorous proposed-vs-reference comparison on official NIH splits |
-| **Deployment** | Full-stack demo: inference API, file upload UI, result visualization |
+| **Deployment** | Full-stack demo with inference API, file upload UI, and result visualization |
 
 ---
 
@@ -60,30 +61,16 @@ Pneumonia · Pneumothorax
 
 ---
 
-## System Architecture
+## System Pipeline
 
-```mermaid
-flowchart TB
-  subgraph Input
-    IMG[Chest X-Ray Image]
-  end
-  subgraph Pipeline
-    PRE[Preprocessing & Augmentation]
-    CNN[DenseNet-121 Backbone]
-    POOL[LSE Pooling]
-    HEAD[14-Label Classifier]
-    CAL[Probability Calibration]
-    THR[Per-Label Thresholds]
-  end
-  subgraph Output
-    API[FastAPI REST API]
-    UI[React Web UI]
-    CAM[Grad-CAM Heatmaps]
-  end
-  IMG --> PRE --> CNN --> POOL --> HEAD --> CAL --> THR
-  THR --> API --> UI
-  THR --> CAM
-```
+![Chest X-ray multi-label diagnosis system workflow](docs/workflow.png)
+
+Editable source: [`docs/workflow.drawio`](docs/workflow.drawio)
+
+The workflow covers three phases: **model training** (NIH split, preprocessing,
+DenseNet-121 + LSE, FZLPR loss), **post-training calibration** (Temperature
+Scaling or Isotonic Regression, Youden-J thresholds), and **inference +
+deployment** (FastAPI + React web app with Grad-CAM explainability).
 
 ---
 
@@ -96,7 +83,7 @@ Fair comparison using the same backbone, loss, and data splits:
 | Pooling | **LSE** | GAP |
 | Loss | FZLPR | FZLPR |
 | View position (AP/PA) | Enabled | Disabled |
-| Advanced augmentation | CLAHE, corner erase, etc. | Basic only |
+| Advanced augmentation | CLAHE, corner erase, and related transforms | Basic only |
 | Calibration | Temperature Scaling + Isotonic | Temperature Scaling only |
 | TTA at inference | Supported | Disabled |
 
@@ -134,7 +121,7 @@ dev.bat
 ```text
 configs/        YAML configs (proposed, reference, BCE/ASL ablations)
 src/cnn/        Dataset, model, train, calibrate, inference, Grad-CAM
-src/api/        FastAPI backend & services
+src/api/        FastAPI backend and services
 frontend/       React/Vite single-page app
 scripts/        Split prep, evaluation, Grad-CAM analysis
 docs/           Workflow diagrams
@@ -154,13 +141,13 @@ pip install -r requirements.txt
 cd frontend && npm install && cd ..
 ```
 
-### 2. Dataset & Checkpoints
+### 2. Dataset and Checkpoints
 
 - Download NIH ChestX-ray14 and create splits (`scripts/prepare_nih_splits.py`)
 - Place trained weights under `models/` (see paths above)
 - Update dataset paths in `configs/config.yaml` (default placeholder: `D:/archive`)
 
-### 3. Train & Calibrate
+### 3. Train and Calibrate
 
 ```powershell
 # Proposed model (LSE + FZLPR)
@@ -169,7 +156,7 @@ python -m src.cnn.train --config configs/config.yaml
 # Reference baseline (GAP)
 python -m src.cnn.train --config configs/config_tham_chieu.yaml
 
-# Fit calibration + per-label thresholds → configs/calibration.json
+# Fit calibration and per-label thresholds → configs/calibration.json
 python -m src.cnn.calibrate --config configs/config.yaml
 ```
 
@@ -183,7 +170,7 @@ python scripts/plot_confusion_matrix_v2.py
 python scripts/test_gradcam_14_labels.py
 ```
 
-Requires local dataset and checkpoints.
+Requires a local dataset and checkpoints.
 
 ---
 
@@ -191,7 +178,7 @@ Requires local dataset and checkpoints.
 
 | Excluded | Reason |
 |----------|--------|
-| NIH images & CSV splits | Size (~45 GB) |
+| NIH images and CSV splits | Size (~45 GB) |
 | Model checkpoints (`.pth`) | Large binary files |
 | `outputs_nih/` and similar | Generated at runtime |
 | `frontend/node_modules/` | Install via npm |
@@ -200,7 +187,7 @@ Requires local dataset and checkpoints.
 
 ## Author
 
-**Nguyen Ba Nhat** — Graduation thesis, multi-label chest X-ray diagnosis  
+**Nguyen Ba Nhat** — Graduation thesis on multi-label chest X-ray diagnosis  
 GitHub: [Nhatnguyn1710/KLTN_ChestXray14](https://github.com/Nhatnguyn1710/KLTN_ChestXray14)
 
 > For research and educational purposes. Not intended as a standalone clinical
