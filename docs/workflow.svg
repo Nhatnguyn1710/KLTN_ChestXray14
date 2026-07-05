@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 880" width="1280" height="880">
+  <defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+  <polygon points="0 0, 8 3, 0 6" fill="#475569"/>
+  </marker>
+  </defs>
+  <rect width="1280" height="880" fill="#FFFFFF"/>
+  <text x="640.0" y="40" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#0F172A">Chest X-Ray Multi-Label Diagnosis — System Workflow</text>
+  <text x="640.0" y="64" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#64748B">Training  →  Calibration  →  Inference  →  Web Deployment</text>
+  <text x="640.0" y="82" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-style="italic" fill="#94A3B8">Clinical decision support — not a substitute for physicians</text>
+  <rect x="40" y="100" width="1200" height="150" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/><text x="56" y="124" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#64748B">1 · MODEL TRAINING</text>
+  <rect x="175" y="136" width="300" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="325.0" y="160.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">NIH ChestX-ray14</text>
+    <text x="325.0" y="177.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">train / val / test</text>
+  <line x1="475" y1="161.0" x2="493" y2="161.0" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="493" y="136" width="300" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="643.0" y="160.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Preprocessing</text>
+    <text x="643.0" y="177.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">CLAHE · resize 448</text>
+  <line x1="793" y1="161.0" x2="811" y2="161.0" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="811" y="136" width="300" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="961.0" y="160.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Augmentation</text>
+    <text x="961.0" y="177.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">train set only</text>
+  <rect x="175" y="198" width="300" height="50" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5"/>
+    <text x="325.0" y="222.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">DenseNet-121</text>
+    <text x="325.0" y="239.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">LSE pooling</text>
+  <line x1="475" y1="223.0" x2="493" y2="223.0" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="493" y="198" width="300" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="643.0" y="222.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">14-label head</text>
+    <text x="643.0" y="239.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">sigmoid output</text>
+  <line x1="793" y1="223.0" x2="811" y2="223.0" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="811" y="198" width="300" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="961.0" y="222.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">FZLPR loss</text>
+    <text x="961.0" y="239.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">14 labels</text>
+  <line x1="640.0" y1="250" x2="640.0" y2="268" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="640.0" y="264" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#7C3AED">validation logits</text>
+  <rect x="40" y="275" width="1200" height="108" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/><text x="56" y="299" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#64748B">2 · CALIBRATION (VALIDATION SET)</text>
+  <rect x="175" y="311" width="460" height="54" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5"/>
+    <text x="405.0" y="337.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Probability calibration</text>
+    <text x="405.0" y="354.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Temperature Scaling or Isotonic</text>
+  <rect x="665" y="311" width="460" height="54" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5"/>
+    <text x="895.0" y="337.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Threshold tuning</text>
+    <text x="895.0" y="354.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Youden-J per label</text>
+  <rect x="40" y="400" width="1200" height="230" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/><text x="56" y="424" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#64748B">3 · INFERENCE & TRIAGE</text>
+  <rect x="175" y="436" width="210" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="280.0" y="460.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">Input</text>
+    <text x="280.0" y="476.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">PNG / JPG</text>
+  <line x1="385" y1="461" x2="401" y2="461" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="401" y="436" width="210" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="506.0" y="460.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">Normalize</text>
+    <text x="506.0" y="476.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">448 · CLAHE</text>
+  <line x1="611" y1="461" x2="627" y2="461" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="627" y="436" width="210" height="50" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5"/>
+    <text x="732.0" y="460.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">DenseNet-121</text>
+    <text x="732.0" y="476.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">load weights</text>
+  <line x1="837" y1="461" x2="853" y2="461" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="853" y="436" width="210" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="958.0" y="460.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">Calibrate</text>
+    <text x="958.0" y="476.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">apply saved T</text>
+  <line x1="1063" y1="461" x2="1079" y2="461" stroke="#475569" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <rect x="1079" y="436" width="210" height="50" rx="8" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+    <text x="1184.0" y="460.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">Decide</text>
+    <text x="1184.0" y="476.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0F172A">3-tier output</text>
+  <rect x="175" y="514" width="280" height="50" rx="8" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.5"/>
+    <text x="315.0" y="538.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A" font-weight="600">POSITIVE</text>
+    <text x="315.0" y="555.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A" font-weight="600">above threshold</text>
+  <rect x="479" y="514" width="280" height="50" rx="8" fill="#FEF9C3" stroke="#CA8A04" stroke-width="1.5"/>
+    <text x="619.0" y="538.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A" font-weight="600">UNCERTAIN</text>
+    <text x="619.0" y="555.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A" font-weight="600">equivocal band</text>
+  <rect x="783" y="514" width="280" height="50" rx="8" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5"/>
+    <text x="923.0" y="538.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A" font-weight="600">NEGATIVE</text>
+    <text x="923.0" y="555.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A" font-weight="600">below band</text>
+  <rect x="40" y="645" width="1200" height="108" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/><text x="56" y="669" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#64748B">4 · WEB APP & EXPLAINABILITY</text>
+  <rect x="175" y="681" width="340" height="54" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="1.5"/>
+    <text x="345.0" y="707.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Grad-CAM heatmap</text>
+    <text x="345.0" y="724.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">visual explanation</text>
+  <rect x="535" y="681" width="530" height="54" rx="8" fill="#ECFDF5" stroke="#059669" stroke-width="1.5"/>
+    <text x="800.0" y="707.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">Web app — FastAPI + React</text>
+    <text x="800.0" y="724.5" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#0F172A">upload · predict · display results</text>
+  <line x1="515" y1="708" x2="535" y2="708" stroke="#D97706" stroke-width="1.5" marker-end="url(#arrowhead)" stroke-dasharray="6,4"/>
+  <rect x="40" y="770" width="1200" height="88" fill="#FAFAFA" stroke="#E2E8F0" rx="6"/>
+  <text x="56" y="792" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748B">Purple = model core   ·   Green = web product   ·   Yellow = Grad-CAM explainability</text>
+  <text x="56" y="814" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748B">Calibration and thresholds are fit on the validation set only.</text>
+  <text x="56" y="836" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748B">Research and educational use — physician review required before clinical decisions.</text>
+  </svg>

@@ -64,13 +64,13 @@ Pneumonia · Pneumothorax
 ## System Pipeline
 
 <p align="center">
-  <img src="docs/workflow.png" alt="Chest X-ray multi-label diagnosis system workflow" width="920"/>
+  <img src="docs/workflow.svg" alt="Chest X-ray multi-label diagnosis system workflow" width="960"/>
 </p>
 
 Editable source: [`docs/workflow.drawio`](docs/workflow.drawio)  
-Regenerate PNG: `python scripts/export_workflow_png.py`
+Regenerate diagram: `python scripts/export_workflow_svg.py`
 
-The workflow covers four phases: **model training**, **calibration on validation**,
+Four phases: **model training**, **calibration on validation**,
 **inference and triage**, and **web deployment with Grad-CAM explainability**.
 
 ---
