@@ -1,67 +1,88 @@
-# KLTN ChestXray14 Diagnosis
+# Chest X-Ray Multi-Label Diagnosis (NIH ChestX-ray14)
 
-Deep learning system for multi-label chest X-ray diagnosis on NIH ChestX-ray14.
-The project includes DenseNet-121 training/evaluation, probability calibration,
-Grad-CAM visualization, a FastAPI backend, and a React frontend.
+AI system that detects **14 chest diseases** from a single X-ray image.
+Built as a graduation thesis project with a full **train → calibrate → deploy** pipeline
+and a production-style **web demo**.
 
-## Main Features
+**Dataset:** [NIH ChestX-ray14](https://nihcc.app.box.com/v/ChestXray-NIHCC)
 
-- Multi-label classification for 14 NIH ChestX-ray14 findings.
-- DenseNet-121 backbone with a custom multi-label classification head.
-- Support for BCE, ASL, and FZLPR loss configurations.
-- Probability calibration and per-label thresholds.
-- Grad-CAM heatmap generation for visual explanation.
-- Web application with FastAPI backend and React frontend.
+---
 
-## Repository Structure
+## What This Project Does
 
-```text
-configs/        Training, inference, and calibration configuration files
-frontend/       React/Vite frontend application
-scripts/        Utility scripts for data split, evaluation, and analysis
-src/api/        FastAPI backend
-src/cnn/        Dataset, model, training, calibration, inference, Grad-CAM
-models/         Placeholder for model checkpoints (not tracked by Git)
+| Step | Description |
+|------|-------------|
+| **Input** | Chest X-ray image (PA / AP view) |
+| **Model** | DenseNet-121 deep learning classifier |
+| **Output** | Probability score for each of 14 findings (e.g. Pneumonia, Effusion, Cardiomegaly) |
+| **Explainability** | Grad-CAM heatmaps highlight regions the model focuses on |
+| **Deployment** | FastAPI backend + React frontend for interactive inference |
+
+---
+
+## Highlights
+
+- **Multi-label classification** — one image, up to 14 concurrent findings
+- **LSE pooling** — proposed spatial aggregation vs. standard GAP baseline
+- **FZLPR loss** — designed for imbalanced medical labels
+- **Calibrated probabilities** — Temperature Scaling + Isotonic Regression per label
+- **Baseline comparison** — proposed system vs. minimal reference config for fair evaluation
+- **End-to-end codebase** — training, calibration, evaluation scripts, and web UI in one repo
+
+---
+
+## Tech Stack
+
+| Layer | Technologies |
+|-------|--------------|
+| Deep Learning | PyTorch, DenseNet-121, CUDA |
+| Backend | FastAPI, Python 3.10+ |
+| Frontend | React, Vite |
+| Explainability | Grad-CAM |
+| Data | NIH ChestX-ray14 (112K+ images) |
+
+---
+
+## System Pipeline
+
+```mermaid
+flowchart LR
+  A[X-Ray Image] --> B[Preprocessing]
+  B --> C[DenseNet-121]
+  C --> D[14-Label Prediction]
+  D --> E[Calibration]
+  E --> F[Web App / Grad-CAM]
 ```
 
-## Files Not Included in Git
+---
 
-The following files are intentionally not tracked because they are large or
-generated locally:
+## Proposed vs. Reference
 
-- NIH ChestX-ray14 images and split CSV files.
-- Model checkpoints, for example `models/nih_densenet121/v2/best_model.pth`.
-- Training outputs such as `outputs_nih/`, `outputs_nih_bce/`,
-  `outputs_nih_asl/`, and `outputs_nih_tham_chieu/`.
-- Runtime uploads and generated Grad-CAM images.
-- Frontend dependencies in `frontend/node_modules/`.
+| | Proposed | Reference baseline |
+|---|----------|-------------------|
+| Config | `configs/config.yaml` | `configs/config_tham_chieu.yaml` |
+| Pooling | LSE | GAP |
+| Augmentation | Advanced (CLAHE, etc.) | Basic |
+| Calibration | Temperature + Isotonic | Temperature only |
 
-## Required Local Files
+---
 
-Before running inference, place the trained checkpoint at:
+## Project Structure
 
-```text
-models/nih_densenet121/v2/best_model.pth
+```
+configs/     Model & training configurations
+src/cnn/     Dataset, model, training, calibration, inference
+src/api/     FastAPI REST API
+frontend/    React web application
+scripts/     Evaluation & analysis utilities
+models/      Checkpoints (not included in Git)
 ```
 
-The default dataset paths are configured in:
+---
 
-```text
-configs/config.yaml
-```
+## Quick Start
 
-By default, the config expects NIH ChestX-ray14 data under:
-
-```text
-D:/archive
-```
-
-If the dataset is stored elsewhere, update the paths in `configs/config.yaml`
-and the other config files as needed.
-
-## Environment Setup
-
-Create and activate a Python virtual environment:
+**1. Setup**
 
 ```powershell
 python -m venv venv
@@ -69,130 +90,51 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Install frontend dependencies:
+**2. Place checkpoint** (train locally or use your own weights)
 
-```powershell
-cd frontend
-npm install
-cd ..
+```
+models/nih_densenet121/v2/best_model.pth
 ```
 
-## Run the Web Application
+**3. Update dataset path** in `configs/config.yaml` (default: `D:/archive`)
 
-For development, run both backend and frontend:
+**4. Run web app**
 
 ```powershell
 dev.bat
 ```
 
-Backend:
+| Service | URL |
+|---------|-----|
+| API | http://localhost:8001 |
+| UI | http://localhost:5173 |
 
-```text
-http://localhost:8001
-```
+---
 
-Frontend:
-
-```text
-http://localhost:5173
-```
-
-Alternatively, run the backend manually:
+## Training & Calibration
 
 ```powershell
-venv\Scripts\activate
-python -m src.api.app --config configs/config.yaml --port 8001
-```
-
-Then run the frontend:
-
-```powershell
-cd frontend
-npm run dev
-```
-
-## Training
-
-Train the main FZLPR configuration:
-
-```powershell
+# Train proposed model
 python -m src.cnn.train --config configs/config.yaml
-```
 
-Train BCE:
-
-```powershell
-python -m src.cnn.train --config configs/config_bce.yaml
-```
-
-Train ASL:
-
-```powershell
-python -m src.cnn.train --config configs/config_asl.yaml
-```
-
-## Calibration
-
-Run probability calibration and threshold selection:
-
-```powershell
+# Calibrate probabilities & set per-label thresholds
 python -m src.cnn.calibrate --config configs/config.yaml
 ```
 
-The main calibration file used by the web application is:
+---
 
-```text
-configs/calibration.json
-```
+## Not Included in Git
 
-Additional calibration files are provided for the BCE and ASL ablation
-configurations:
+- Dataset images and CSV splits
+- Model checkpoints (`.pth`)
+- Training outputs (`outputs_nih/`)
+- `node_modules/`
 
-```text
-configs/calibration_bce.json
-configs/calibration_asl.json
-```
+Download data and weights separately, then update paths in `configs/*.yaml`.
 
-## Evaluation Scripts
+---
 
-Scripts for reproducing the thesis experiments and figures (Chapter 3):
+## Author
 
-```powershell
-# Data preparation
-python scripts/prepare_nih_splits.py
-
-# Test-set metrics (Table 3.4, Table 3.6, Figure 3.7 with --tta)
-python scripts/evaluate_v2_test.py
-
-# Proposed vs reference configuration (Table 3.5, Figure 3.4)
-python scripts/evaluate_de_xuat_vs_tham_chieu.py
-
-# Grad-CAM: proposed vs reference (Figure 3.5, Figure 3.6)
-python scripts/compare_gradcam_de_xuat_vs_tham_chieu.py
-
-# Confusion matrices per label (Figure 3.11)
-python scripts/plot_confusion_matrix_v2.py
-
-# Calibrated thresholds per label (Figure 3.12)
-python scripts/plot_hinh_3_14_thresholds.py
-
-# Grad-CAM heatmaps for 14 labels (Figure 3.13)
-python scripts/test_gradcam_14_labels.py
-```
-
-Pipeline sanity checks (independent of the thesis figures):
-
-```powershell
-python scripts/smoke_train_step.py
-python scripts/smoke_inference_parity.py
-```
-
-Some scripts require the NIH dataset and trained checkpoints to be available
-locally.
-
-## Notes
-
-This repository contains source code and lightweight configuration files only.
-Dataset files, model checkpoints, generated figures, slides, and runtime outputs
-are excluded from Git. Store those artifacts separately and place them in the
-expected paths before running full inference or evaluation.
+Graduation thesis — **Multi-label chest X-ray diagnosis on NIH ChestX-ray14**  
+Repository: [github.com/Nhatnguyn1710/KLTN_ChestXray14](https://github.com/Nhatnguyn1710/KLTN_ChestXray14)
