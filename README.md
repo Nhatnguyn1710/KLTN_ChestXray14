@@ -63,14 +63,15 @@ Pneumonia · Pneumothorax
 
 ## System Pipeline
 
-![Chest X-ray multi-label diagnosis system workflow](docs/workflow.png)
+<p align="center">
+  <img src="docs/workflow.png" alt="Chest X-ray multi-label diagnosis system workflow" width="920"/>
+</p>
 
-Editable source: [`docs/workflow.drawio`](docs/workflow.drawio)
+Editable source: [`docs/workflow.drawio`](docs/workflow.drawio)  
+Regenerate PNG: `python scripts/export_workflow_png.py`
 
-The workflow covers three phases: **model training** (NIH split, preprocessing,
-DenseNet-121 + LSE, FZLPR loss), **post-training calibration** (Temperature
-Scaling or Isotonic Regression, Youden-J thresholds), and **inference +
-deployment** (FastAPI + React web app with Grad-CAM explainability).
+The workflow covers four phases: **model training**, **calibration on validation**,
+**inference and triage**, and **web deployment with Grad-CAM explainability**.
 
 ---
 
